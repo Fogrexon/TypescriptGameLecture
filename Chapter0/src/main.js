@@ -14,4 +14,5 @@ playerImage.onload = function () {
 }
 
 // lib.jsの中身が全部見える
-console.log(drawPlayer, PLAYER_WIDTH, PLAYER_HEIGHT);
+console.log('drawPlayer:', drawPlayer);
+console.log('PLAYER_WIDTH, PLAYER_HEIGHT:', PLAYER_WIDTH, PLAYER_HEIGHT);
