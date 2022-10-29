@@ -11,6 +11,7 @@
     "fix": "prettier \"./src/**/*.ts\" --write & eslint \"./src/**/*.ts\" --fix"
   },
   "devDependencies": {
+    "@types/three": "^0.141.0",
     "@typescript-eslint/eslint-plugin": "^5.29.0",
     "@typescript-eslint/parser": "^5.29.0",
     "eslint": "^8.18.0",
