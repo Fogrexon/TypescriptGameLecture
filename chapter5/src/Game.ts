@@ -1,5 +1,6 @@
 import { PerspectiveCamera, Scene, WebGLRenderer } from 'three';
-import { Stage } from './Stage';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
+import { Title } from './title';
 
 export class Game {
   private renderer: WebGLRenderer;
@@ -7,6 +8,8 @@ export class Game {
   private camera: PerspectiveCamera;
 
   private scene: Scene;
+
+  private title: Title;
 
   constructor(canvas: HTMLCanvasElement) {
     // eslint-disable-next-line no-param-reassign
@@ -17,18 +20,20 @@ export class Game {
     this.renderer = new WebGLRenderer({
       canvas,
     });
+    this.renderer.setClearColor(0xff0000, 0.5);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
-    this.camera.position.set(20, 20, 20);
+    this.camera.position.set(5, 5, 5);
     this.camera.lookAt(0, 0, 0);
     this.scene = new Scene();
 
-    const stage = new Stage(canvas, this.camera);
-    this.scene.add(stage.getGroup());
+    const fbxLoader = new FBXLoader();
 
-    window.addEventListener('resize', this.resize);
+    this.title = new Title(this.scene, fbxLoader);
 
-    this.tick();
+    window.addEventListener('resize', this.resize.bind(this));
+
+    requestAnimationFrame(this.tick.bind(this));
   }
 
   private resize() {
@@ -36,7 +41,8 @@ export class Game {
     this.camera.aspect = window.innerWidth / window.innerHeight;
   }
 
-  private tick() {
+  private tick(time: number) {
+    this.title.update(time);
     this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(this.tick.bind(this));
   }
