@@ -9,6 +9,7 @@ export class Title {
     fileLoader.load(titleFbx, (modelData) => {
       this.model = modelData.scene;
       if (!this.model) return;
+      this.model.position.set(0, 3, 0);
       this.model.scale.set(1, 1, 1);
       scene.add(this.model);
     });
@@ -16,7 +17,6 @@ export class Title {
 
   public update(time: number) {
     if (!this.model) return;
-    this.model.rotation.y = (time / 5 / 1000) * Math.PI * 2;
-    this.model.position.y = Math.sin(time / 1 / 1000) * 0.5 + 3;
+    // 3章 タイトル文字を動かすアニメーションを書こう
   }
 }
