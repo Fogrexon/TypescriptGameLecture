@@ -32,15 +32,10 @@ export class Stage extends EventDispatcher {
 
     this.scene = scene;
 
-    this.circleModelTemplate = new Mesh(
-      new SphereGeometry(1.2),
-      new MeshBasicMaterial({ color: 0x0000ff }),
-    );
+    // 2章 自分の好きな図形のマーカーを作ろう
 
-    this.crossModelTemplate = new Mesh(
-      new ConeGeometry(1.2, 5, 10),
-      new MeshBasicMaterial({ color: 0xff0000 }),
-    );
+    // this.circleModelTemplate =
+    // this.crossModelTemplate =
 
     const board = new Mesh(
       new BoxGeometry(9, 0.1, 9),
