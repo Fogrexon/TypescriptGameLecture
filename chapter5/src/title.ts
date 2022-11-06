@@ -1,18 +1,19 @@
 import { Group, Scene } from 'three';
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
-import titleFbx from './tictactoe.fbx?url';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import titleFbx from './title.glb?url';
 
 export class Title {
   private scene: Scene;
 
   private model: Group | null = null;
 
-  constructor(scene: Scene, fileLoader: FBXLoader) {
+  constructor(scene: Scene, fileLoader: GLTFLoader) {
     this.scene = scene;
 
     fileLoader.load(titleFbx, (modelData) => {
-      this.model = modelData;
-      this.model.scale.set(0.01, 0.01, 0.01);
+      this.model = modelData.scene;
+      if(!this.model) return;
+      this.model.scale.set(1, 1, 1);
       scene.add(this.model);
     });
   }

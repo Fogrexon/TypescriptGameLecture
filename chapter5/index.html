@@ -8,7 +8,24 @@
   </head>
   <body>
     <canvas id="cnv"></canvas>
-    <div></div>
+    <div id="tutorial-wrapper">
+      <div id="tutorial">
+        <h1>Tic-Tac-Toe 3D</h1>
+        <h2>ルール</h2>
+        <p>
+          3Dの盤面をクリックすると、そのマスに○が置かれます。
+          <br />
+          3つ並ぶと勝ちです。
+        </p>
+        <h2>操作方法</h2>
+        <p>
+          マウスでクリック: ○を置く
+          <br />
+          右クリックしながらドラッグ: カメラを回転
+        </p>
+        <button id="tutorial-close">閉じる</button>
+      </div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

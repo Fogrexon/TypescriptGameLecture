@@ -1,5 +1,5 @@
 {
-  "name": "chapter1",
+  "name": "chapter5",
   "private": true,
   "version": "0.0.0",
   "scripts": {
@@ -22,6 +22,7 @@
     "vite": "^2.9.9"
   },
   "dependencies": {
-    "three": "^0.141.0"
+    "three": "^0.141.0",
+    "three.interaction": "^0.2.3"
   }
 }

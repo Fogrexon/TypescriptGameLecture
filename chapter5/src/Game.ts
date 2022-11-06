@@ -1,49 +1,58 @@
-import { PerspectiveCamera, Scene, WebGLRenderer } from 'three';
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
+import {
+  MOUSE, PerspectiveCamera, Scene, WebGLRenderer,
+} from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { Stage } from './stage';
 import { Title } from './title';
 
-export class Game {
-  private renderer: WebGLRenderer;
+export const Game = (canvas: HTMLCanvasElement) => {
+  canvas.width = window.innerWidth;
+  // eslint-disable-next-line no-param-reassign
+  canvas.height = window.innerHeight;
 
-  private camera: PerspectiveCamera;
+  const renderer = new WebGLRenderer({
+    canvas,
+  });
+  renderer.setClearAlpha(0.0);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+  camera.position.set(5, 5, 5);
+  camera.lookAt(0, 0, 0);
+  const scene = new Scene();
 
-  private scene: Scene;
+  const fbxLoader = new GLTFLoader();
 
-  private title: Title;
+  const title = new Title(scene, fbxLoader);
+  const stage = new Stage(renderer, scene, camera, fbxLoader);
 
-  constructor(canvas: HTMLCanvasElement) {
-    // eslint-disable-next-line no-param-reassign
-    canvas.width = window.innerWidth;
-    // eslint-disable-next-line no-param-reassign
-    canvas.height = window.innerHeight;
+  const resize = () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+  };
 
-    this.renderer = new WebGLRenderer({
-      canvas,
-    });
-    this.renderer.setClearColor(0xff0000, 0.5);
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
-    this.camera.position.set(5, 5, 5);
-    this.camera.lookAt(0, 0, 0);
-    this.scene = new Scene();
+  window.addEventListener('resize', resize);
 
-    const fbxLoader = new FBXLoader();
+  const orbitControls = new OrbitControls(camera, renderer.domElement);
+  orbitControls.mouseButtons = {
+    RIGHT: MOUSE.ROTATE,
+    MIDDLE: MOUSE.DOLLY,
+    LEFT: MOUSE.PAN,
+  };
+  orbitControls.enableZoom = false;
+  orbitControls.enablePan = false;
+  orbitControls.enableDamping = true;
+  orbitControls.dampingFactor = 0.1;
+  orbitControls.maxPolarAngle = Math.PI * 0.3;
+  orbitControls.minPolarAngle = Math.PI * 0.3;
 
-    this.title = new Title(this.scene, fbxLoader);
+  const tick = (time: number) => {
+    orbitControls.update();
+    stage.update();
+    title.update(time);
+    renderer.render(scene, camera);
+    requestAnimationFrame(tick.bind(this));
+  };
 
-    window.addEventListener('resize', this.resize.bind(this));
-
-    requestAnimationFrame(this.tick.bind(this));
-  }
-
-  private resize() {
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.camera.aspect = window.innerWidth / window.innerHeight;
-  }
-
-  private tick(time: number) {
-    this.title.update(time);
-    this.renderer.render(this.scene, this.camera);
-    requestAnimationFrame(this.tick.bind(this));
-  }
-}
+  requestAnimationFrame(tick.bind(this));
+};

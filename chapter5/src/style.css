@@ -14,3 +14,29 @@ body {
   margin: 0;
   overflow: hidden;
 }
+
+canvas {
+  background: radial-gradient(#333333, #111111);
+}
+
+#tutorial-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#tutorial-wrapper[data-visible="false"] {
+  display: none;
+}
+
+#tutorial {
+  text-align: center;
+  padding: 30px;
+  background: rgba(230, 230, 230, 0.8);
+  border-radius: 10px;
+}
