@@ -7,6 +7,7 @@ import { Stage } from './stage';
 import { Title } from './title';
 
 export const Game = (canvas: HTMLCanvasElement) => {
+  // eslint-disable-next-line no-param-reassign
   canvas.width = window.innerWidth;
   // eslint-disable-next-line no-param-reassign
   canvas.height = window.innerHeight;

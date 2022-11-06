@@ -1,6 +1,6 @@
 import { Group, Scene } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import titleFbx from './title.glb?url';
+import titleFbx from './models/title.glb?url';
 
 export class Title {
   private scene: Scene;

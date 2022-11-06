@@ -11,5 +11,3 @@ tutorialClose?.addEventListener('click', () => {
 
 const canvas = document.getElementById('cnv') as HTMLCanvasElement;
 Game(canvas);
-
-console.log(toCoordinate(toBit(-1, -1)))

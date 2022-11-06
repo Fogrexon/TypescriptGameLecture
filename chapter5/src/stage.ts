@@ -2,9 +2,9 @@ import {
   BoxGeometry, Camera, Group, Mesh, MeshBasicMaterial, Renderer, Scene,
 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import circleModel from './circle.glb?url';
-import crossModel from './cross.glb?url';
-import { predict, predictBest } from './tictactoe/predict';
+import circleModel from './models/circle.glb?url';
+import crossModel from './models/cross.glb?url';
+import { predictBest } from './tictactoe/predict';
 import {
   BoardBit, isWin, toBit, toCoordinate,
 } from './tictactoe/utils';
