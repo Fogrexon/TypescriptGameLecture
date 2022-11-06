@@ -1,5 +1,5 @@
 import {
-  allPlaceable, BoardBit, isWin, Player, Result,
+  allPlaceable, BoardBit, judgeResult, Player, Result,
 } from './utils';
 
 export type PredictNode = {
@@ -16,7 +16,7 @@ export const predict = (
   nextPlayer: Player,
   depth: number,
 ): PredictNode => {
-  const win = isWin(circle, cross);
+  const win = judgeResult(circle, cross);
   if (win !== 'none') {
     let score = 0;
     switch (win) {

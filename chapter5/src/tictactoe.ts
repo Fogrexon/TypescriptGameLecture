@@ -1,7 +1,7 @@
 /* eslint-disable no-bitwise */
 import { predictBest } from './tictactoe/predict';
 import {
-  isWin as judgeResult, Result, toBit, toCoordinate,
+  judgeResult, Result, toBit, toCoordinate,
 } from './tictactoe/utils';
 
 export class TicTacToe {

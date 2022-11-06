@@ -3,6 +3,9 @@ import {
 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
+import { HalftonePass } from 'three/examples/jsm/postprocessing/HalftonePass';
 import { Stage } from './stage';
 import { Title } from './title';
 import { TicTacToe } from './tictactoe';
@@ -46,6 +49,17 @@ export const Game = (canvas: HTMLCanvasElement) => {
   const title = new Title(scene, fbxLoader);
   const stage = new Stage(renderer, scene, camera, fbxLoader);
 
+  // ポスプロ
+  const composer = new EffectComposer(renderer);
+  const renderPass = new RenderPass(scene, camera);
+  composer.addPass(renderPass);
+  const halftonePass = new HalftonePass(10, 10, {});
+  halftonePass.renderToScreen = true;
+  composer.addPass(halftonePass);
+  // const pass = new BloomPass();
+  // pass.renderToScreen = true;
+  // composer.addPass(pass);
+
   // ゲームAIのセットアップ
   const tictactoe = new TicTacToe();
   stage.addEventListener('place', (event) => {
@@ -58,12 +72,15 @@ export const Game = (canvas: HTMLCanvasElement) => {
     stage.placeMarkerModel(crossPlace.x, crossPlace.y, 'cross');
   });
 
+  let prevTime = 0;
+
   const tick = (time: number) => {
     orbitControls.update();
     title.update(time);
-    renderer.render(scene, camera);
-    requestAnimationFrame(tick.bind(this));
+    composer.render(time - prevTime);
+    prevTime = time;
+    requestAnimationFrame(tick);
   };
 
-  requestAnimationFrame(tick.bind(this));
+  requestAnimationFrame(tick);
 };

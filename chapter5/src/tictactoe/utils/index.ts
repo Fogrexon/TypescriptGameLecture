@@ -20,7 +20,7 @@ const WIN_BOARD = [
   toBitFromList([true, false, false, false, true, false, false, false, true]),
   toBitFromList([false, false, true, false, true, false, true, false, false]),
 ];
-export const isWin = (circle: BoardBit, cross: BoardBit): Result => {
+export const judgeResult = (circle: BoardBit, cross: BoardBit): Result => {
   if (circle + cross === 0b111111111) return 'draw';
   for (let i = 0; i < WIN_BOARD.length; i += 1) {
     if ((circle & WIN_BOARD[i]) === WIN_BOARD[i]) return 'circle';

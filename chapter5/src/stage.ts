@@ -5,7 +5,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import circleModel from './models/circle.glb?url';
 import crossModel from './models/cross.glb?url';
 import {
-  BoardBit, isWin, Player, toBit,
+  BoardBit, judgeResult, Player, toBit,
 } from './tictactoe/utils';
 import { Interaction } from './utils/interaction';
 
@@ -69,10 +69,11 @@ export class Stage extends EventDispatcher {
     wall4.position.set(-1.5, 0.2, 0.0);
     board.add(wall4);
 
+    // クリック判定
     this.interaction = new Interaction(renderer, board, camera);
     this.interaction.addEventListener('click', (event) => {
       if (event.intersects.length === 0) return;
-      if (isWin(this.circleBit, this.crossBit) !== 'none') return;
+      if (judgeResult(this.circleBit, this.crossBit) !== 'none') return;
       const intersect = event.intersects[0];
       const { point } = intersect;
       const x = Math.round(point.x / 3);
@@ -86,6 +87,7 @@ export class Stage extends EventDispatcher {
     });
   }
 
+  // マーカーを配置する
   public placeMarkerModel(x: number, y: number, playerType: Player) {
     const marker = playerType === 'circle' ? this.circleModelTemplate?.clone() : this.crossModelTemplate?.clone();
     if (!marker) return;
