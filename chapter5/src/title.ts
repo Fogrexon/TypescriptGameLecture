@@ -3,13 +3,9 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import titleFbx from './models/title.glb?url';
 
 export class Title {
-  private scene: Scene;
-
   private model: Group | null = null;
 
   constructor(scene: Scene, fileLoader: GLTFLoader) {
-    this.scene = scene;
-
     fileLoader.load(titleFbx, (modelData) => {
       this.model = modelData.scene;
       if (!this.model) return;
