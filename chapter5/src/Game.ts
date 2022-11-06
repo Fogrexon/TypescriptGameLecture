@@ -5,13 +5,10 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Stage } from './stage';
 import { Title } from './title';
+import { TicTacToe } from './tictactoe';
 
 export const Game = (canvas: HTMLCanvasElement) => {
-  // eslint-disable-next-line no-param-reassign
-  canvas.width = window.innerWidth;
-  // eslint-disable-next-line no-param-reassign
-  canvas.height = window.innerHeight;
-
+  // three.jsのセットアップ
   const renderer = new WebGLRenderer({
     canvas,
   });
@@ -20,13 +17,8 @@ export const Game = (canvas: HTMLCanvasElement) => {
   const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
   camera.position.set(5, 5, 5);
   camera.lookAt(0, 0, 0);
-  const scene = new Scene();
 
-  const fbxLoader = new GLTFLoader();
-
-  const title = new Title(scene, fbxLoader);
-  const stage = new Stage(renderer, scene, camera, fbxLoader);
-
+  // リサイズイベント
   const resize = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -34,6 +26,7 @@ export const Game = (canvas: HTMLCanvasElement) => {
 
   window.addEventListener('resize', resize);
 
+  // ぐるぐる見回す用
   const orbitControls = new OrbitControls(camera, renderer.domElement);
   orbitControls.mouseButtons = {
     RIGHT: MOUSE.ROTATE,
@@ -47,9 +40,26 @@ export const Game = (canvas: HTMLCanvasElement) => {
   orbitControls.maxPolarAngle = Math.PI * 0.3;
   orbitControls.minPolarAngle = Math.PI * 0.3;
 
+  // シーンのセットアップ
+  const fbxLoader = new GLTFLoader();
+  const scene = new Scene();
+  const title = new Title(scene, fbxLoader);
+  const stage = new Stage(renderer, scene, camera, fbxLoader);
+
+  // ゲームAIのセットアップ
+  const tictactoe = new TicTacToe();
+  stage.addEventListener('place', (event) => {
+    if (tictactoe.getResult() !== 'none') return;
+    const flag = tictactoe.tryPlaceCircle(event.x, event.y);
+    if (!flag) return;
+    stage.placeMarkerModel(event.x, event.y, 'circle');
+    if (tictactoe.getResult() !== 'none') return;
+    const crossPlace = tictactoe.placeNextCross();
+    stage.placeMarkerModel(crossPlace.x, crossPlace.y, 'cross');
+  });
+
   const tick = (time: number) => {
     orbitControls.update();
-    stage.update();
     title.update(time);
     renderer.render(scene, camera);
     requestAnimationFrame(tick.bind(this));

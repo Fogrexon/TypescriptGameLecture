@@ -1,5 +1,7 @@
 /* eslint-disable no-bitwise */
 export type BoardBit = number;
+export type Result = 'circle' | 'cross' | 'draw' | 'none';
+export type Player = 'circle' | 'cross';
 
 export const toBitFromList = (arr: boolean[]): BoardBit => arr.reduce((acc, val, i) => {
   if (val) {
@@ -18,7 +20,7 @@ const WIN_BOARD = [
   toBitFromList([true, false, false, false, true, false, false, false, true]),
   toBitFromList([false, false, true, false, true, false, true, false, false]),
 ];
-export const isWin = (circle: BoardBit, cross: BoardBit) => {
+export const isWin = (circle: BoardBit, cross: BoardBit): Result => {
   if (circle + cross === 0b111111111) return 'draw';
   for (let i = 0; i < WIN_BOARD.length; i += 1) {
     if ((circle & WIN_BOARD[i]) === WIN_BOARD[i]) return 'circle';
@@ -39,7 +41,7 @@ export const allPlaceable = (board: BoardBit, current: BoardBit) => {
 
 export const toCoordinate = (placed: BoardBit) => {
   const num = Math.log2(placed);
-  return [(num % 3) - 1, Math.floor(num / 3) - 1];
+  return { x: (num % 3) - 1, y: Math.floor(num / 3) - 1 };
 };
 
 export const toBit = (x: number, y: number) => 2 ** (x + 1 + (y + 1) * 3);

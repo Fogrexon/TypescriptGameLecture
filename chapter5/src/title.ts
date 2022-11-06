@@ -12,7 +12,7 @@ export class Title {
 
     fileLoader.load(titleFbx, (modelData) => {
       this.model = modelData.scene;
-      if(!this.model) return;
+      if (!this.model) return;
       this.model.scale.set(1, 1, 1);
       scene.add(this.model);
     });

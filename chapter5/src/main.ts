@@ -1,6 +1,5 @@
 import { Game } from './Game';
 import './style.css';
-import { toBit, toCoordinate } from './tictactoe/utils';
 
 const tutorialWrapper = document.getElementById('tutorial-wrapper');
 const tutorialClose = document.getElementById('tutorial-close');

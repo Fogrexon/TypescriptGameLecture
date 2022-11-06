@@ -1,14 +1,21 @@
-import { allPlaceable, BoardBit, isWin } from './utils';
+import {
+  allPlaceable, BoardBit, isWin, Player, Result,
+} from './utils';
 
 export type PredictNode = {
   circle: BoardBit;
   cross: BoardBit;
-  win: 'circle' | 'cross' | 'draw' | 'none';
+  result: Result;
   next: PredictNode[];
   score: number;
 }
 
-export const predict = (circle: BoardBit, cross: BoardBit, nextPlayer: 'circle' | 'cross', depth: number): PredictNode => {
+export const predict = (
+  circle: BoardBit,
+  cross: BoardBit,
+  nextPlayer: Player,
+  depth: number,
+): PredictNode => {
   const win = isWin(circle, cross);
   if (win !== 'none') {
     let score = 0;
@@ -26,7 +33,7 @@ export const predict = (circle: BoardBit, cross: BoardBit, nextPlayer: 'circle' 
     return {
       circle,
       cross,
-      win,
+      result: win,
       next: [],
       score,
     };
@@ -44,16 +51,16 @@ export const predict = (circle: BoardBit, cross: BoardBit, nextPlayer: 'circle' 
   return {
     circle,
     cross,
-    win,
+    result: win,
     next: nextNodes,
     score,
   };
 };
 
-export const predictBest = (circle: BoardBit, cross: BoardBit, nextPlayer: 'circle' | 'cross'): PredictNode => {
+export const predictBest = (circle: BoardBit, cross: BoardBit, nextPlayer: Player): PredictNode => {
   const node = predict(circle, cross, nextPlayer, 0);
   const best = node.next.reduce((acc, val) => {
-    if (acc.win === nextPlayer) return acc;
+    if (acc.result === nextPlayer) return acc;
     if (nextPlayer === 'circle' && acc.score < val.score) return val;
     if (nextPlayer === 'cross' && acc.score > val.score) return val;
     return acc;

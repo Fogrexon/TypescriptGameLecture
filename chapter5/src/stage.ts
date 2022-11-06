@@ -1,16 +1,15 @@
 import {
-  BoxGeometry, Camera, Group, Mesh, MeshBasicMaterial, Renderer, Scene,
+  BoxGeometry, Camera, EventDispatcher, Group, Mesh, MeshBasicMaterial, Renderer, Scene,
 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import circleModel from './models/circle.glb?url';
 import crossModel from './models/cross.glb?url';
-import { predictBest } from './tictactoe/predict';
 import {
-  BoardBit, isWin, toBit, toCoordinate,
+  BoardBit, isWin, Player, toBit,
 } from './tictactoe/utils';
 import { Interaction } from './utils/interaction';
 
-export class Stage {
+export class Stage extends EventDispatcher {
   private scene: Scene;
 
   private interaction: Interaction;
@@ -23,9 +22,9 @@ export class Stage {
 
   private crossBit: BoardBit = 0;
 
-  private currentPlayer: 'circle' | 'cross' = 'circle';
-
   constructor(renderer: Renderer, scene: Scene, camera: Camera, fileLoader: GLTFLoader) {
+    super();
+
     this.scene = scene;
 
     fileLoader.load(circleModel, (modelData) => {
@@ -79,36 +78,15 @@ export class Stage {
       const x = Math.round(point.x / 3);
       const y = Math.round(point.z / 3);
 
-      // eslint-disable-next-line no-bitwise
       const bit = toBit(x, y);
 
       // eslint-disable-next-line no-bitwise
       if ((this.circleBit & bit) !== 0 || (this.crossBit & bit) !== 0) return;
-      this.placeMarker(x, y);
+      this.dispatchEvent({ type: 'place', x, y });
     });
   }
 
-  public update(time: number) {
-    // no impl
-  }
-
-  public placeMarker(x: number, y: number) {
-    this.placeMarkerModel(x, y, 'circle');
-
-    this.circleBit += toBit(x, y);
-    if (isWin(this.circleBit, this.crossBit) !== 'none') return;
-
-    const predTree = predictBest(this.circleBit, this.crossBit, 'cross');
-
-    console.log(this.circleBit, this.crossBit, predTree);
-
-    // eslint-disable-next-line no-bitwise
-    const nextPlace = toCoordinate(this.crossBit ^ predTree.cross);
-    this.crossBit = predTree.cross;
-    this.placeMarkerModel(nextPlace[0], nextPlace[1], 'cross');
-  }
-
-  public placeMarkerModel(x: number, y: number, playerType: 'circle'|'cross') {
+  public placeMarkerModel(x: number, y: number, playerType: Player) {
     const marker = playerType === 'circle' ? this.circleModelTemplate?.clone() : this.crossModelTemplate?.clone();
     if (!marker) return;
     marker.position.set(x * 3, 0.1, y * 3);
