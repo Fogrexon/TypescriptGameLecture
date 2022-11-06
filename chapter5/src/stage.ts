@@ -1,9 +1,14 @@
 import {
-  BoxGeometry, Camera, EventDispatcher, Group, Mesh, MeshBasicMaterial, Renderer, Scene,
+  BoxGeometry,
+  Camera,
+  ConeGeometry,
+  EventDispatcher,
+  Mesh,
+  MeshBasicMaterial,
+  Renderer,
+  Scene,
+  SphereGeometry,
 } from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import circleModel from './models/circle.glb?url';
-import crossModel from './models/cross.glb?url';
 import {
   BoardBit, judgeResult, Player, toBit,
 } from './tictactoe/utils';
@@ -14,25 +19,28 @@ export class Stage extends EventDispatcher {
 
   private interaction: Interaction;
 
-  private circleModelTemplate: Group | null = null;
+  private circleModelTemplate: Mesh | null = null;
 
-  private crossModelTemplate: Group | null = null;
+  private crossModelTemplate: Mesh | null = null;
 
   private circleBit: BoardBit = 0;
 
   private crossBit: BoardBit = 0;
 
-  constructor(renderer: Renderer, scene: Scene, camera: Camera, fileLoader: GLTFLoader) {
+  constructor(renderer: Renderer, scene: Scene, camera: Camera) {
     super();
 
     this.scene = scene;
 
-    fileLoader.load(circleModel, (modelData) => {
-      this.circleModelTemplate = modelData.scene;
-    });
-    fileLoader.load(crossModel, (modelData) => {
-      this.crossModelTemplate = modelData.scene;
-    });
+    this.circleModelTemplate = new Mesh(
+      new SphereGeometry(1.2),
+      new MeshBasicMaterial({ color: 0x0000ff }),
+    );
+
+    this.crossModelTemplate = new Mesh(
+      new ConeGeometry(1.2, 5, 10),
+      new MeshBasicMaterial({ color: 0xff0000 }),
+    );
 
     const board = new Mesh(
       new BoxGeometry(9, 0.1, 9),

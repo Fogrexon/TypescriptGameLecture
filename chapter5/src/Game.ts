@@ -44,7 +44,7 @@ export const Game = (canvas: HTMLCanvasElement) => {
   const fbxLoader = new GLTFLoader();
   const scene = new Scene();
   const title = new Title(scene, fbxLoader);
-  const stage = new Stage(renderer, scene, camera, fbxLoader);
+  const stage = new Stage(renderer, scene, camera);
 
   // ゲームAIのセットアップ
   const tictactoe = new TicTacToe();
