@@ -1,3 +1,7 @@
+/**
+ * ゲームに使うステートの型
+ */
+
 export interface Mover {
   x: number;
   y: number;
@@ -9,7 +13,6 @@ export interface Ball {
 }
 
 export interface GameState {
-  timestamp: Date;
   playerState: Mover;
   enemyState: Mover;
   ballState: Ball;
@@ -17,5 +20,6 @@ export interface GameState {
 }
 
 export interface Score {
-  score: number;
+  playerScore: number;
+  enemyScore: number;
 }

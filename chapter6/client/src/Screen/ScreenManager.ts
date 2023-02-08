@@ -3,6 +3,9 @@ export interface IScreenControllable {
   endScreen(): void;
 }
 
+/**
+ * スクリーンの切り替え機能を提供するクラス
+ */
 export class ScreenManager {
   private static screenMap: Map<string, IScreenControllable> = new Map();
   private static currentScene: string = ''

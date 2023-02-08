@@ -1,3 +1,7 @@
+/**
+ * WebSocketからの生メッセージ
+ */
+
 export interface UpdateGameMessage {
   player: {
     x: number,

@@ -1,5 +1,8 @@
 import { Ball, Mover } from "./State";
 
+/**
+ * ゲーム内で発生するイベントの型定義
+ */
 export type UpdateGameEvent = {
   player: Mover;
   enemy: Mover;
