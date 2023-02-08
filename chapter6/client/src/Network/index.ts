@@ -2,19 +2,24 @@ import mitt, { Emitter } from "mitt";
 import { WebSocketEvent } from "./Event";
 import { EndMessage, ReadyMessage, UpdateGameMessage, UpdateScoreMessage, WebSocketMessage } from "./Message";
 
+/**
+ * 鯖との通信を行うクラス
+ */
 export class Network {
   
   public readonly eventEmitter: Emitter<WebSocketEvent>;
 
   private websocket: WebSocket;
 
-  constructor(public name: string, public address: string) {
+  constructor(public address: string) {
     this.eventEmitter = mitt();
     this.websocket = new WebSocket(address);
     this.websocket.addEventListener('message', this.websocketHandler.bind(this));
   }
 
-  // PUBLIC 
+  /**
+   * ゲームの状態を更新するイベントを発火する
+   */
   public async sendPlayerState() {
     this.websocket.send(JSON.stringify({
       type: 'update-player',
@@ -25,6 +30,10 @@ export class Network {
     }))
   }
 
+  /**
+   * ユーザー名を指定して部屋に参加する
+   * @param name ユーザー名
+   */
   public async sendJoinRoom(name: string) {
     this.websocket.send(JSON.stringify({
       type: 'join-room',
@@ -35,6 +44,10 @@ export class Network {
   }
 
   // PRIVATE
+  /**
+   * websocketのイベントを受け取って適切な処理に投げる
+   * @param event websocketのイベント
+   */
   private websocketHandler(event: MessageEvent) {
     const data = JSON.parse(event.data) as WebSocketMessage;
     switch (event.type) {
@@ -55,6 +68,10 @@ export class Network {
     }
   }
 
+  /**
+   * ゲーム全体の状態のアップデート
+   * @param message 
+   */
   private fireUpdateGameEvent(message: UpdateGameMessage) {
     this.eventEmitter.emit('update-game', {
       player: {
@@ -72,6 +89,10 @@ export class Network {
     })
   }
 
+  /**
+   * スコア更新イベント
+   * @param message 
+   */
   private fireUpdateScoreEvent(message: UpdateScoreMessage) {
     this.eventEmitter.emit('update-score', {
       playerScore: message.playerScore,
@@ -79,6 +100,10 @@ export class Network {
     })
   }
 
+  /**
+   * 相手が参加して準備ができたときのイベント
+   * @param message 
+   */
   private fireReadyEvent(message: ReadyMessage) {
     this.eventEmitter.emit('ready', {
       enemy: message.enemy,
@@ -87,6 +112,10 @@ export class Network {
     })
   }
 
+  /**
+   * ゲーム終了イベント
+   * @param message 
+   */
   private fireEndEvent(message: EndMessage) {
     this.eventEmitter.emit('end', {
       playerScore: message.playerScore,
