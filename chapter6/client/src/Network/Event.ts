@@ -1,4 +1,3 @@
-import { RoomInfo } from "./Room";
 import { Ball, Mover } from "./State";
 
 export type UpdateGameEvent = {
@@ -7,6 +6,10 @@ export type UpdateGameEvent = {
   ball: Ball;
 }
 
+export type UpdateScoreEvent = {
+  playerScore: number
+  enemyScore: number
+}
 
 export type ReadyEvent = {
   enemy: string
@@ -14,12 +17,13 @@ export type ReadyEvent = {
   endTime: Date
 }
 export type EndEvent = {
-  win: boolean;
-  score: number;
+  playerScore: number;
+  enemyScore: number;
 }
 
-export type WebsocketEvent = {
-  'ready-room': ReadyEvent
+export type WebSocketEvent = {
+  ready: ReadyEvent
   end: EndEvent,
   'update-game': UpdateGameEvent
+  'update-score': UpdateScoreEvent
 }
