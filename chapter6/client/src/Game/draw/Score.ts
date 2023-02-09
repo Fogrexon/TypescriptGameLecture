@@ -1,10 +1,9 @@
-import { GameInfo } from "../../Network/State";
-import { IDrawable } from "./Drawer";
+import { IDrawable } from './Drawer';
 
 export class Score implements IDrawable {
   private scoreState = {
     playerScore: 0,
-    enemyScore: 0
+    enemyScore: 0,
   };
 
   public update(playerScore: number, enemyScore: number) {
@@ -22,7 +21,11 @@ export class Score implements IDrawable {
     ctx.font = '30px serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(`${this.scoreState.playerScore} / ${this.scoreState.enemyScore}`, -halfWidth / 2, -halfHeight / 2);
+    ctx.fillText(
+      `${this.scoreState.playerScore} / ${this.scoreState.enemyScore}`,
+      -halfWidth / 2,
+      -halfHeight / 2
+    );
     ctx.restore();
   }
 }

@@ -4,5 +4,5 @@
 
 export const globalState = {
   playerName: '',
-  enemyName: ''
-}
+  enemyName: '',
+};

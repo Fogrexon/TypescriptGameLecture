@@ -1,12 +1,17 @@
-import mitt, { Emitter } from "mitt";
-import { WebSocketEvent } from "./Event";
-import { EndMessage, ReadyMessage, UpdateGameMessage, UpdateScoreMessage, WebSocketMessage } from "./Message";
+import mitt, { Emitter } from 'mitt';
+import { WebSocketEvent } from './Event';
+import {
+  EndMessage,
+  ReadyMessage,
+  UpdateGameMessage,
+  UpdateScoreMessage,
+  WebSocketMessage,
+} from './Message';
 
 /**
  * 鯖との通信を行うクラス
  */
 export class Network {
-  
   public readonly eventEmitter: Emitter<WebSocketEvent>;
 
   private websocket: WebSocket;
@@ -21,13 +26,15 @@ export class Network {
    * ゲームの状態を更新するイベントを発火する
    */
   public async sendPlayerState() {
-    this.websocket.send(JSON.stringify({
-      type: 'update-player',
-      data: {
-        x: 0,
-        y: 0
-      }
-    }))
+    this.websocket.send(
+      JSON.stringify({
+        type: 'update-player',
+        data: {
+          x: 0,
+          y: 0,
+        },
+      })
+    );
   }
 
   /**
@@ -35,12 +42,14 @@ export class Network {
    * @param name ユーザー名
    */
   public async sendJoinRoom(name: string) {
-    this.websocket.send(JSON.stringify({
-      type: 'join-room',
-      data: {
-        name
-      }
-    }))
+    this.websocket.send(
+      JSON.stringify({
+        type: 'join-room',
+        data: {
+          name,
+        },
+      })
+    );
   }
 
   // PRIVATE
@@ -70,56 +79,56 @@ export class Network {
 
   /**
    * ゲーム全体の状態のアップデート
-   * @param message 
+   * @param message
    */
   private fireUpdateGameEvent(message: UpdateGameMessage) {
     this.eventEmitter.emit('update-game', {
       player: {
         x: message.player.x,
-        y: message.player.y
+        y: message.player.y,
       },
       enemy: {
         x: message.enemy.x,
-        y: message.enemy.y
+        y: message.enemy.y,
       },
       ball: {
         x: message.enemy.x,
-        y: message.ball.y
-      }
-    })
+        y: message.ball.y,
+      },
+    });
   }
 
   /**
    * スコア更新イベント
-   * @param message 
+   * @param message
    */
   private fireUpdateScoreEvent(message: UpdateScoreMessage) {
     this.eventEmitter.emit('update-score', {
       playerScore: message.playerScore,
-      enemyScore: message.enemyScore
-    })
+      enemyScore: message.enemyScore,
+    });
   }
 
   /**
    * 相手が参加して準備ができたときのイベント
-   * @param message 
+   * @param message
    */
   private fireReadyEvent(message: ReadyMessage) {
     this.eventEmitter.emit('ready', {
       enemy: message.enemy,
       startTime: new Date(message.startTime),
-      endTime: new Date(message.endTime)
-    })
+      endTime: new Date(message.endTime),
+    });
   }
 
   /**
    * ゲーム終了イベント
-   * @param message 
+   * @param message
    */
   private fireEndEvent(message: EndMessage) {
     this.eventEmitter.emit('end', {
       playerScore: message.playerScore,
-      enemyScore: message.enemyScore
-    })
+      enemyScore: message.enemyScore,
+    });
   }
 }

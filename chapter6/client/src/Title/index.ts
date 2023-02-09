@@ -1,14 +1,13 @@
-import { Network } from "../Network";
-import { IScreenControllable, ScreenManager } from "../Screen/ScreenManager";
-import { globalState } from "../globalState";
+import { Network } from '../Network';
+import { IScreenControllable, ScreenManager } from '../Screen/ScreenManager';
+import { globalState } from '../globalState';
 
 export class Title implements IScreenControllable {
-
   // dom関連
   private parent: HTMLElement;
   private nameField: HTMLInputElement;
   private joinButton: HTMLButtonElement;
-  
+
   // 通信関連
   private network: Network;
 
@@ -23,7 +22,7 @@ export class Title implements IScreenControllable {
    * タイトル画面開始
    */
   public startScreen(): void {
-    this.parent.dataset.visible = 'true'
+    this.parent.dataset.visible = 'true';
     this.joinButton.addEventListener('click', this.joinButtonHandler.bind(this));
   }
   /**
@@ -31,7 +30,7 @@ export class Title implements IScreenControllable {
    * ゲーム画面へ移動
    */
   public endScreen(): void {
-    this.parent.dataset.visible = 'false'
+    this.parent.dataset.visible = 'false';
     this.joinButton.removeEventListener('click', this.joinButtonHandler.bind(this));
   }
 

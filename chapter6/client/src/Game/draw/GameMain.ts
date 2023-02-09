@@ -1,5 +1,5 @@
-import { GameInfo } from "../../Network/State";
-import { IDrawable } from "./Drawer";
+import { GameInfo } from '../../Network/State';
+import { IDrawable } from './Drawer';
 
 /**
  * ゲームの描画におけるサイズ
@@ -8,26 +8,26 @@ import { IDrawable } from "./Drawer";
 const COMPONENT_SIZE = {
   MOVER: {
     WIDTH: 0.3,
-    HEIGHT: 0.04
+    HEIGHT: 0.04,
   },
-  BALL_RADIUS: 0.02
-}
+  BALL_RADIUS: 0.02,
+};
 
 export class GameMain implements IDrawable {
   private componentState = {
     playerState: {
       x: 0,
-      y: 0
+      y: 0,
     },
     enemyState: {
       x: 0,
-      y: 0
+      y: 0,
     },
     ballState: {
       x: 0,
-      y: 0
+      y: 0,
     },
-  }
+  };
 
   public update(gameState: GameInfo) {
     this.componentState.playerState = gameState.playerState;
@@ -49,7 +49,7 @@ export class GameMain implements IDrawable {
       this.componentState.playerState.y - COMPONENT_SIZE.MOVER.HEIGHT / 2,
       COMPONENT_SIZE.MOVER.WIDTH,
       COMPONENT_SIZE.MOVER.HEIGHT
-      );
+    );
     ctx.fillStyle = 'red';
     ctx.fillRect(
       this.componentState.enemyState.x - COMPONENT_SIZE.MOVER.WIDTH / 2,
@@ -57,8 +57,15 @@ export class GameMain implements IDrawable {
       COMPONENT_SIZE.MOVER.WIDTH,
       COMPONENT_SIZE.MOVER.HEIGHT
     );
-    ctx.fillStyle = 'black'
-    ctx.arc(this.componentState.ballState.x, this.componentState.ballState.y, COMPONENT_SIZE.BALL_RADIUS, 0, Math.PI * 2, false)
+    ctx.fillStyle = 'black';
+    ctx.arc(
+      this.componentState.ballState.x,
+      this.componentState.ballState.y,
+      COMPONENT_SIZE.BALL_RADIUS,
+      0,
+      Math.PI * 2,
+      false
+    );
     ctx.restore();
   }
 }

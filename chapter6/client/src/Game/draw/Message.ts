@@ -1,4 +1,4 @@
-import { IDrawable } from "./Drawer";
+import { IDrawable } from './Drawer';
 
 export class Message implements IDrawable {
   private message: string = '';
