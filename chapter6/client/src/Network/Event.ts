@@ -1,12 +1,12 @@
-import { Ball, Mover } from "./State";
+import { BallInfo, MoverInfo } from "./State";
 
 /**
  * ゲーム内で発生するイベントの型定義
  */
 export type UpdateGameEvent = {
-  player: Mover;
-  enemy: Mover;
-  ball: Ball;
+  player: MoverInfo;
+  enemy: MoverInfo;
+  ball: BallInfo;
 }
 
 export type UpdateScoreEvent = {

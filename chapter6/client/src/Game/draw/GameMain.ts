@@ -1,4 +1,4 @@
-import { GameState } from "../../Network/State";
+import { GameInfo } from "../../Network/State";
 import { IDrawable } from "./Drawer";
 
 /**
@@ -29,7 +29,7 @@ export class GameMain implements IDrawable {
     },
   }
 
-  public update(gameState: GameState) {
+  public update(gameState: GameInfo) {
     this.componentState.playerState = gameState.playerState;
     this.componentState.enemyState = gameState.enemyState;
     this.componentState.ballState = gameState.ballState;

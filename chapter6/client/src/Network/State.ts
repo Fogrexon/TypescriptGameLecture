@@ -2,24 +2,24 @@
  * ゲームに使うステートの型
  */
 
-export interface Mover {
+export interface MoverInfo {
   x: number;
   y: number;
 }
 
-export interface Ball {
+export interface BallInfo {
   x: number;
   y: number;
 }
 
-export interface GameState {
-  playerState: Mover;
-  enemyState: Mover;
-  ballState: Ball;
-  scoreState: Score;
-}
-
-export interface Score {
+export interface ScoreInfo {
   playerScore: number;
   enemyScore: number;
+}
+
+export interface GameInfo {
+  playerState: MoverInfo;
+  enemyState: MoverInfo;
+  ballState: BallInfo;
+  scoreState: ScoreInfo;
 }

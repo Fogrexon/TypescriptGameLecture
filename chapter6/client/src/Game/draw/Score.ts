@@ -1,19 +1,7 @@
-import { GameState } from "../../Network/State";
+import { GameInfo } from "../../Network/State";
 import { IDrawable } from "./Drawer";
 
-/**
- * ゲームの描画におけるサイズ
- * 横幅、縦幅をそれぞれ1としたときの比率
- */
-const COMPONENT_SIZE = {
-  MOVER: {
-    WIDTH: 0.3,
-    HEIGHT: 0.04
-  },
-  BALL_RADIUS: 0.02
-}
-
-export class GameMain implements IDrawable {
+export class Score implements IDrawable {
   private scoreState = {
     playerScore: 0,
     enemyScore: 0
