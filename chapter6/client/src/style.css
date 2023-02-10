@@ -1,21 +1,25 @@
-boyd {
+body {
   padding: 0;
   margin: 0;
   width: 100vw;
   hegiht: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
+.screen[data-visible="true"] {
+  display: flex;
+}
 .screen {
   width: 100vw;
   height: 100vh;
-  visible: false
+  display: none;
+  align-items: center;
+  justify-content: center;
 }
 
-.screen[data-visible=true] {
-  visible: true
-}
-
-.screen > canvas {
-  width: 100%;
-  hegith: 100%;
+.screen>canvas {
+  border: 1px solid black;
 }

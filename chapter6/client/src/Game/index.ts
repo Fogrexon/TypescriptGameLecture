@@ -1,5 +1,6 @@
 import { Network } from '../Network';
-import { IScreenControllable } from '../Screen/ScreenManager';
+import { EndEvent, ReadyEvent, UpdateGameEvent, UpdateScoreEvent } from '../Network/Event';
+import { IScreenControllable, ScreenManager } from '../Screen/ScreenManager';
 import { Drawer } from './draw/Drawer';
 import { GameMain } from './draw/GameMain';
 import { Message } from './draw/Message';
@@ -27,6 +28,16 @@ export class Game implements IScreenControllable {
     y: 0,
   };
 
+  private enemyInfo = {
+    x: 0,
+    y: 0,
+  };
+
+  private ballInfo = {
+    x: 0,
+    y: 0,
+  };
+
   constructor(private wrapper: HTMLElement, canvas: HTMLCanvasElement, private network: Network) {
     this.ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
@@ -42,7 +53,7 @@ export class Game implements IScreenControllable {
   }
 
   public startScreen(): void {
-    this.wrapper.dataset.visible = 'false';
+    this.wrapper.dataset.visible = 'true';
 
     this.network.eventEmitter.on('update-game', this.updateGameHandler.bind(this));
     this.network.eventEmitter.on('update-score', this.updateScoreHandler.bind(this));
@@ -61,6 +72,8 @@ export class Game implements IScreenControllable {
     this.network.eventEmitter.off('update-score', this.updateScoreHandler.bind(this));
     this.network.eventEmitter.off('ready', this.readyHandler.bind(this));
     this.network.eventEmitter.off('end', this.endHandler.bind(this));
+    
+    this.messageDrawer.update('')
 
     window.clearInterval(this.intervalId);
   }
@@ -69,31 +82,57 @@ export class Game implements IScreenControllable {
     switch (this.gameState) {
       case 'ready':
         break;
-      case 'countdown':
-        const delta = Math.floor(new Date().getTime() - this.startTime.getTime());
+      case 'countdown': {
+        const delta = Math.floor((new Date().getTime() - this.startTime.getTime()) / 1000);
         if (delta < 0) {
           this.gameState = 'playing'
           this.messageDrawer.update('')
         }
         else this.messageDrawer.update(`${delta}`);
         break;
+      }
       case 'playing':
         // プレイヤーの操作方法
         
         break;
-      case 'end':
-        this.messageDrawer.update('End');
+      case 'end': {
+        const delta = (new Date().getTime() - this.endTime.getTime()) / 1000;
+        if (delta > 3) {
+          ScreenManager.moveScreen('title');
+        }
         break;
+      }
     }
 
     this.drawer.draw();
   }
 
-  private updateGameHandler() {}
+  private updateGameHandler(event: UpdateGameEvent) {
+    this.enemyInfo = event.enemy;
+    this.ballInfo = event.ball;
+    this.gameMainDrawer.update(this.playerInfo, this.enemyInfo, this.ballInfo);
+  }
 
-  private updateScoreHandler() {}
+  private updateScoreHandler(event: UpdateScoreEvent) {
+    this.scoreDrawer.update(event.playerScore, event.enemyScore);
+  }
 
-  private readyHandler() {}
+  private readyHandler(event: ReadyEvent) {
+    this.gameState = 'countdown';
+    this.startTime = new Date(event.startTime);
+    this.endTime = new Date(event.endTime);
+  }
 
-  private endHandler() {}
+  private endHandler(event: EndEvent) {
+    this.gameState = 'end';
+    this.scoreDrawer.update(event.playerScore, event.enemyScore);
+
+    if (event.playerScore > event.enemyScore) {
+      this.messageDrawer.update('You Win!', 'blue');
+    } else if (event.playerScore < event.enemyScore) {
+      this.messageDrawer.update('You Lose...', 'red');
+    } else {
+      this.messageDrawer.update('Draw', 'green');
+    }
+  }
 }

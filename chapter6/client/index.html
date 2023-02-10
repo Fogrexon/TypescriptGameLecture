@@ -6,9 +6,15 @@
     <title>WebSocket Paint</title>
   </head>
   <body>
-    <div id="title" class="screen"></div>
-    <div id="main" class="screen">
-      <canvas id="cnv"></canvas>
+    <div id="title" class="screen">
+      <div>
+        <h1>Pong Online</h1>
+        <input type="text" id="name" placeholder="名前を入力" />
+        <button id="join">スタート</button>
+      </div>
+    </div>
+    <div id="game" class="screen">
+      <canvas id="canvas" width="500" height="500"></canvas>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>

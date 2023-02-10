@@ -1,4 +1,4 @@
-import { GameInfo } from '../../Network/State';
+import { MoverInfo } from '../../Network/State';
 import { IDrawable } from './Drawer';
 
 /**
@@ -29,10 +29,10 @@ export class GameMain implements IDrawable {
     },
   };
 
-  public update(gameState: GameInfo) {
-    this.componentState.playerState = gameState.playerState;
-    this.componentState.enemyState = gameState.enemyState;
-    this.componentState.ballState = gameState.ballState;
+  public update(playerState: MoverInfo, enemyState: MoverInfo, ballState: MoverInfo) {
+    this.componentState.playerState = playerState;
+    this.componentState.enemyState = enemyState;
+    this.componentState.ballState = ballState;
   }
 
   public draw(ctx: CanvasRenderingContext2D) {
