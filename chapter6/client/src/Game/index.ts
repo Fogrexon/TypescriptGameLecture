@@ -72,8 +72,8 @@ export class Game implements IScreenControllable {
     this.network.eventEmitter.off('update-score', this.updateScoreHandler.bind(this));
     this.network.eventEmitter.off('ready', this.readyHandler.bind(this));
     this.network.eventEmitter.off('end', this.endHandler.bind(this));
-    
-    this.messageDrawer.update('')
+
+    this.messageDrawer.update('');
 
     window.clearInterval(this.intervalId);
   }
@@ -85,15 +85,14 @@ export class Game implements IScreenControllable {
       case 'countdown': {
         const delta = Math.floor((new Date().getTime() - this.startTime.getTime()) / 1000);
         if (delta < 0) {
-          this.gameState = 'playing'
-          this.messageDrawer.update('')
-        }
-        else this.messageDrawer.update(`${delta}`);
+          this.gameState = 'playing';
+          this.messageDrawer.update('');
+        } else this.messageDrawer.update(`${delta}`);
         break;
       }
       case 'playing':
         // プレイヤーの操作方法
-        
+
         break;
       case 'end': {
         const delta = (new Date().getTime() - this.endTime.getTime()) / 1000;
