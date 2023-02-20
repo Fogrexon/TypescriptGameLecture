@@ -33,20 +33,21 @@ export interface EndMessage {
   enemyScore: number;
 }
 
-export type WebSocketMessage =
-  | {
-      type: 'update-game';
-      data: UpdateGameMessage;
-    }
-  | {
-      type: 'update-score';
-      data: UpdateScoreMessage;
-    }
-  | {
-      type: 'ready-room';
-      data: ReadyMessage;
-    }
-  | {
-      type: 'end';
-      data: EndMessage;
-    };
+export interface UpdatePlayerMessage {
+  x: number;
+  y: number;
+}
+export interface JoinRoomMessage {
+  name: string;
+}
+
+export interface ServerToClientEvent {
+  'update-game': (event: UpdateGameMessage) => void;
+  'update-score': (event: UpdateScoreMessage) => void;
+  ready: (event: ReadyMessage) => void;
+  end: (event: EndMessage) => void;
+}
+export interface ClientToServerEvent {
+  'update-player': (event: UpdatePlayerMessage) => void;
+  'join-room': (event: JoinRoomMessage) => void;
+}

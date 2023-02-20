@@ -1,12 +1,14 @@
 import mitt, { Emitter } from 'mitt';
 import { WebSocketEvent } from './Event';
 import {
+  ClientToServerEvent,
   EndMessage,
   ReadyMessage,
+  ServerToClientEvent,
   UpdateGameMessage,
   UpdateScoreMessage,
-  WebSocketMessage,
 } from './Message';
+import { Socket, io } from 'socket.io-client';
 
 /**
  * 鯖との通信を行うクラス
@@ -14,12 +16,20 @@ import {
 export class Network {
   public readonly eventEmitter: Emitter<WebSocketEvent>;
 
-  private websocket: WebSocket;
+  private websocket: Socket<ServerToClientEvent, ClientToServerEvent>;
 
   constructor(public address: string) {
     this.eventEmitter = mitt();
-    this.websocket = new WebSocket(address);
-    this.websocket.addEventListener('message', this.websocketHandler.bind(this));
+    this.websocket = io(address);
+    
+    this.websocket.on('connect', (socket) => {
+      const engine = this.websocket.io.engine;
+
+      engine.on("update-game", this.fireUpdateGameEvent.bind(this));
+      engine.on("update-score", this.fireUpdateScoreEvent.bind(this));
+      engine.on("ready", this.fireReadyEvent.bind(this));
+      engine.on("end", this.fireEndEvent.bind(this));
+    })
   }
 
   /**
@@ -53,29 +63,6 @@ export class Network {
   }
 
   // PRIVATE
-  /**
-   * websocketのイベントを受け取って適切な処理に投げる
-   * @param event websocketのイベント
-   */
-  private websocketHandler(event: MessageEvent) {
-    const data = JSON.parse(event.data) as WebSocketMessage;
-    switch (event.type) {
-      case 'update-game':
-        this.fireUpdateGameEvent(data.data as UpdateGameMessage);
-        break;
-      case 'update-score':
-        this.fireUpdateScoreEvent(data.data as UpdateScoreMessage);
-        break;
-      case 'ready-room':
-        this.fireReadyEvent(data.data as ReadyMessage);
-        break;
-      case 'end':
-        this.fireEndEvent(data.data as EndMessage);
-        break;
-      default:
-        break;
-    }
-  }
 
   /**
    * ゲーム全体の状態のアップデート
